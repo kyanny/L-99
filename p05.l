@@ -5,8 +5,8 @@
            lright)
           (t
            (my-reverse-rec
-            (cdr lleft)
-            (cons (car lleft) lright)))))
+            (rest lleft)
+            (cons (first lleft) lright)))))
   (my-reverse-rec l nil))
 
 (my-reverse '(a b c d))
