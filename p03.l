@@ -1,3 +1,4 @@
+;; Find the K'th element of a list.
 (defun element-at (l nth)
   (cond ((or (< nth 0) (> nth (length l)))
          nil)

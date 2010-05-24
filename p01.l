@@ -1,3 +1,4 @@
+;; Find the last box of a list.
 (defun my-last (l)
   (cons (car (reverse l)) nil))
 

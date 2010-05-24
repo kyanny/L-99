@@ -1,3 +1,4 @@
+;; Find the last but one box of a list.
 (defun my-but-last (l)
   (reverse
    (list
