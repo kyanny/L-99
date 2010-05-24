@@ -6,3 +6,5 @@
          (1+ (my-length (cdr l))))))
 
 (my-length '(a b c))
+
+(my-length nil)
