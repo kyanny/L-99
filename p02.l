@@ -2,8 +2,8 @@
 (defun my-but-last (l)
   (cond ((null (cdr l))
          (cons (car l) nil))
-        ((null (cdr (cdr l)))
-         (cons (car l) (cons (car (cdr l)) nil)))
+        ((null (cddr l))
+         (cons (car l) (cons (cadr l) nil)))
         (t
          (my-but-last (cdr l)))))
 
