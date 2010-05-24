@@ -1,8 +1,9 @@
 ;; Find the last box of a list.
 (defun my-last (l)
-  (cons (car (reverse l)) nil))
+  (cond ((null (cdr l))
+         (car l))
+        (t
+         (my-last (cdr l)))))
 
 (my-last '(a b c d))
-
-(equal (my-last '(a b c d)) '(d))
-
+(my-last nil)
