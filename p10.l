@@ -4,28 +4,41 @@
 ;;     Example:
 ;;     * (encode '(a a a a b c c a a d e e e e))
 ;;     ((4 A) (1 B) (2 C) (2 A) (1 D)(4 E))
-(defun compress (n l)
-  (cond ((null l)
-         (cons n l))
-        ((not (eq (car l) (cadr l)))
-         (cons n (list (car l))))
-        (t
-         (compress (+ 1 n) (cdr l)))))
 
-(defun recur-rest (l)
-  (cond ((null l)
+;; P09, rewrite.
+(defun bundle (l)
+  (cond ((or (null l) (atom l))
          nil)
-        ((not (eq (car l) (cadr l)))
-         (cdr l))
+        ((eq (car l) (cadr l))
+         (cons (car l) (bundle (cdr l))))
         (t
-         (recur-rest (cdr l)))))
+         (cons (car l) nil))))
 
+(defun skip-until-boundary (l)
+  (cond ((or (null l) (atom l))
+         nil)
+        ((eq (car l) (cadr l))
+         (skip-until-boundary (cdr l)))
+        (t
+         (cdr l))))
+
+(defun pack (l)
+  (cond ((or (null l) (atom l))
+         nil)
+        (t
+         (cons (bundle l) (pack (skip-until-boundary l))))))
+(pack '(a a a a b c c a a d e e e e))
+(tree-equal (pack '(a a a a b c c a a d e e e e))
+            '((A A A A) (B) (C C) (A A) (D) (E E E E)))
+
+
+;; define encode using pack.
 (defun encode (l)
-  (cond ((null l)
+  (cond ((or (null l) (atom l))
          nil)
         (t
-         (cons (compress 1 l) (encode (recur-rest l))))))
-
+         (cons (list (length (bundle l)) (car l))
+               (encode (skip-until-boundary l))))))
 (encode '(a a a a b c c a a d e e e e))
 (tree-equal (encode '(a a a a b c c a a d e e e e))
             '((4 A) (1 B) (2 C) (2 A) (1 D)(4 E)))
