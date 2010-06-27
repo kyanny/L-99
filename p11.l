@@ -4,29 +4,32 @@
 ;;     Example:
 ;;     * (encode-modified '(a a a a b c c a a d e e e e))
 ;;     ((4 A) B (2 C) (2 A) D (4 E))
-(defun compress-if-duplicate (n l)
-  (cond ((null l)
-         (cons n l))
-        ((not (eq (car l) (cadr l)))
-         (if (= n 1)
-             (car l)
-             (cons n (list (car l)))))
-        (t
-         (compress-if-duplicate (+ 1 n) (cdr l)))))
+(defun bundle (l)
+  (cond
+    ((or (null l) (atom l))
+     nil)
+    ((eq (car l) (cadr l))
+     (cons (car l) (bundle (cdr l))))
+    (t
+     (cons (car l) nil))))
 
-(defun recur-rest (l)
-  (cond ((null l)
+(defun skip-until-boundary (l)
+  (cond ((or (null l) (atom l))
          nil)
-        ((not (eq (car l) (cadr l)))
-         (cdr l))
+        ((eq (car l) (cadr l))
+         (skip-until-boundary (cdr l)))
         (t
-         (recur-rest (cdr l)))))
+         (cdr l))))
 
 (defun encode-modified (l)
-  (cond ((null l)
-         nil)
-        (t
-         (cons (compress-if-duplicate 1 l) (encode-modified (recur-rest l))))))
+  (cond
+    ((or (null l) (atom l))
+     nil)
+    ((eq 1 (length (bundle l)))
+     (cons (car l) (encode-modified (skip-until-boundary l))))
+    (t
+     (cons (list (length (bundle l)) (car l))
+           (encode-modified (skip-until-boundary l))))))
 
 (encode-modified '(a a a a b c c a a d e e e e))
 (tree-equal (encode-modified '(a a a a b c c a a d e e e e))
