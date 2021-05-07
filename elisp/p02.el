@@ -16,6 +16,7 @@
     t))
 
 (defun my-but-last (list)
+  "Find the last but one box of a list."
   (if (eq (cdr (cdr list)) nil)
       list
     (my-but-last (cdr list))))
