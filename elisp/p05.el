@@ -1,10 +1,11 @@
 ;; P05 (*) Reverse a list.
 
-(defun my-reverse (list)
-  (let ((newlist nil))
-    (defun f (list tmp)
-      (if (null list)
-	  tmp
-	(f (cdr list) (cons (car list) tmp))))
-    (f list newlist)))
-(my-reverse '(a b c d))
+(defun p05 (list)
+  "Reverse a list."
+  (defun f (list tmp)
+    (if (null list)
+	tmp
+      (f (cdr list) (cons (car list) tmp))))
+  (f list nil))
+
+(p05 '(a b c d))
